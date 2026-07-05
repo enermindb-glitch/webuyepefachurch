@@ -72,6 +72,25 @@
   </div>
 
   <div class="section-title">
+    <h2>Registered contributors</h2>
+    <span id="contributorCount"></span>
+  </div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table style="width:100%; border-collapse:collapse;" id="membersTable">
+      <thead>
+        <tr style="background:var(--cream); text-align:left;">
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Name</th>
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Monthly pledge</th>
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Total contributed</th>
+        </tr>
+      </thead>
+      <tbody id="membersTableBody">
+        <tr><td colspan="3" style="padding:18px;">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">
     <h2>Ready to give this month?</h2>
   </div>
   <p class="lede">
@@ -161,6 +180,25 @@ async function loadDashboard() {
       }
     });
   }
+
+  document.getElementById('contributorCount').textContent = data.memberCount + ' registered';
+  renderMembersTable(data.memberDetails || []);
+}
+
+function renderMembersTable(members) {
+  const body = document.getElementById('membersTableBody');
+  if (members.length === 0) {
+    body.innerHTML = '<tr><td colspan="3" style="padding:18px; font-style:italic; color:var(--ink-soft);">No members registered yet.</td></tr>';
+    return;
+  }
+  members.sort((a, b) => a.name.localeCompare(b.name));
+  body.innerHTML = members.map(m => `
+    <tr style="border-top:1px solid var(--line);">
+      <td style="padding:12px 18px;">${m.name}</td>
+      <td style="padding:12px 18px; font-family:'IBM Plex Mono',monospace;">${formatKES(m.pledge)}</td>
+      <td style="padding:12px 18px; font-family:'IBM Plex Mono',monospace;">${formatKES(m.contributed)}</td>
+    </tr>
+  `).join('');
 }
 
 loadDashboard();
