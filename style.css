@@ -1,29 +1,31 @@
 /* ============================================================
    Webuye Central PEFA Church Youth Ministry — Instruments Fund
-   Design tokens
-   Ink:    #1B2A4A  (deep worship-night indigo)
-   Gold:   #C89A3C  (brass / offering)
-   Cream:  #FAF5E9  (paper / hymn sheet)
-   Maroon: #7A2E2E  (pending / attention)
-   Green:  #2F6B44  (approved / growth)
-   Display face: Fraunces (warm, characterful serif)
-   Body face:    Work Sans
-   Data face:    IBM Plex Mono (ledger numbers)
+   Design tokens (v3 — moss & ochre)
+   Ink:      #24301F  (deep moss — hymnal binding)
+   Ink-soft: #55624C
+   Ochre:    #C77A2E  (aged brass horn)
+   Ochre-lt: #EBC79A
+   Parchment:#F4F0E6  (hymn sheet paper)
+   Maroon:   #7A3327  (pending / attention)
+   Green:    #3C6E4A  (approved / growth)
+   Display face: Spectral
+   Body face:    Karla
+   Data face:    IBM Plex Mono
 ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,500&family=Karla:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
 :root {
-  --ink: #1B2A4A;
-  --ink-soft: #445075;
-  --gold: #C89A3C;
-  --gold-soft: #E7CE93;
-  --cream: #FAF5E9;
+  --ink: #24301F;
+  --ink-soft: #55624C;
+  --gold: #C77A2E;
+  --gold-soft: #EBC79A;
+  --cream: #F4F0E6;
   --paper: #FFFFFF;
-  --maroon: #7A2E2E;
-  --green: #2F6B44;
-  --line: #E3D9C4;
-  --shadow: 0 10px 30px rgba(27, 42, 74, 0.08);
+  --maroon: #7A3327;
+  --green: #3C6E4A;
+  --line: #DED2B8;
+  --shadow: 0 12px 32px rgba(36, 48, 31, 0.10);
 }
 
 * { box-sizing: border-box; }
@@ -32,12 +34,12 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
-  font-family: 'Work Sans', sans-serif;
+  font-family: 'Karla', sans-serif;
   line-height: 1.5;
 }
 
 h1, h2, h3 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Spectral', serif;
   margin: 0 0 0.4em 0;
   color: var(--ink);
 }
@@ -48,21 +50,22 @@ a { color: var(--ink); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 6vw;
-  border-bottom: 1px solid var(--line);
-  background: var(--paper);
+  padding: 20px 6vw;
+  background: var(--ink);
+  border-bottom: 3px solid var(--gold);
 }
 
 .brand {
-  font-family: 'Fraunces', serif;
+  font-family: 'Spectral', serif;
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
+  color: var(--cream);
 }
 
 .brand small {
   display: block;
-  font-family: 'Work Sans', sans-serif;
+  font-family: 'Karla', sans-serif;
   font-weight: 500;
   font-size: 0.72rem;
   color: var(--gold);
@@ -76,14 +79,14 @@ nav a {
   font-weight: 500;
   font-size: 0.92rem;
   margin-left: 26px;
-  color: var(--ink-soft);
+  color: var(--gold-soft);
   border-bottom: 2px solid transparent;
   padding-bottom: 3px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 nav a:hover, nav a.active {
-  color: var(--ink);
+  color: var(--cream);
   border-color: var(--gold);
 }
 
@@ -105,7 +108,7 @@ main {
 
 .hero h1 {
   font-size: clamp(1.9rem, 4vw, 2.7rem);
-  max-width: 16ch;
+  max-width: 18ch;
 }
 
 .hero p.lede {
@@ -117,7 +120,8 @@ main {
 .card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-top: 3px solid var(--gold);
+  border-radius: 10px;
   padding: 28px 30px;
   box-shadow: var(--shadow);
 }
@@ -132,7 +136,8 @@ main {
 .stat {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
   padding: 20px 22px;
 }
 
@@ -171,7 +176,7 @@ label {
 
 input, select, textarea {
   width: 100%;
-  font-family: 'Work Sans', sans-serif;
+  font-family: 'Karla', sans-serif;
   font-size: 0.96rem;
   padding: 11px 13px;
   border: 1px solid var(--line);
@@ -189,20 +194,20 @@ input:focus, select:focus, textarea:focus {
 }
 
 button {
-  font-family: 'Work Sans', sans-serif;
+  font-family: 'Karla', sans-serif;
   font-weight: 600;
   font-size: 0.96rem;
   padding: 12px 22px;
   border-radius: 8px;
   border: none;
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--gold);
+  color: var(--ink);
   cursor: pointer;
   transition: background 0.15s ease, transform 0.1s ease;
   align-self: flex-start;
 }
 
-button:hover { background: var(--ink-soft); }
+button:hover { background: #AD7F27; }
 button:active { transform: translateY(1px); }
 
 button.secondary {
@@ -215,8 +220,8 @@ button.approve { background: var(--green); color: white; }
 button.reject { background: var(--maroon); color: white; }
 
 .msg { padding: 13px 16px; border-radius: 8px; font-size: 0.92rem; margin-top: -4px; }
-.msg.success { background: #E7F1EA; color: var(--green); border: 1px solid #BFDCC8; }
-.msg.error { background: #F6E7E6; color: var(--maroon); border: 1px solid #E4C2C0; }
+.msg.success { background: #E5EFEA; color: var(--green); border: 1px solid #BCD6CB; }
+.msg.error { background: #F5E6E4; color: var(--maroon); border: 1px solid #E1C1BE; }
 .msg.hidden { display: none; }
 
 .help {
@@ -227,7 +232,8 @@ button.reject { background: var(--maroon); color: white; }
 
 .pending-item {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
   padding: 16px 18px;
   margin-bottom: 14px;
   background: var(--paper);
@@ -256,8 +262,9 @@ button.reject { background: var(--maroon); color: white; }
 footer {
   text-align: center;
   font-size: 0.8rem;
-  color: var(--ink-soft);
-  padding: 30px 0 50px;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 26px 0;
 }
 
 .progress-caption {
@@ -274,3 +281,5 @@ footer {
   font-style: italic;
   padding: 20px 0;
 }
+
+table th, table td { text-align: left; }
