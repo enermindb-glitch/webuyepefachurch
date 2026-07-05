@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instruments Fund — Webuye Central PEFA Youth Ministry</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="config.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">Webuye Central PEFA Youth Ministry <small>Instruments &amp; Sound System Fund</small></div>
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="register.html">Register</a>
+    <a href="contribute.html">Give</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="eyebrow">Two-Phase Budget · Target KES 409,500</span>
+    <h1>Watch the fund move, month by month.</h1>
+    <p class="lede">Every approved M-Pesa contribution moves this needle. Phase 1 gets us to a working worship setup; Phase 2 completes the band and professional sound.</p>
+  </section>
+
+  <!-- SIGNATURE ELEMENT: progress rendered as a rising note on a music staff -->
+  <div class="card" style="margin-top:28px;">
+    <svg id="staffProgress" viewBox="0 0 900 190" width="100%" height="190" role="img" aria-label="Fund progress on a music staff">
+      <!-- staff lines -->
+      <g stroke="#E3D9C4" stroke-width="1.5">
+        <line x1="40" y1="40" x2="860" y2="40"></line>
+        <line x1="40" y1="65" x2="860" y2="65"></line>
+        <line x1="40" y1="90" x2="860" y2="90"></line>
+        <line x1="40" y1="115" x2="860" y2="115"></line>
+        <line x1="40" y1="140" x2="860" y2="140"></line>
+      </g>
+      <!-- filled progress track under the staff -->
+      <rect x="40" y="160" width="820" height="10" rx="5" fill="#F0E9D8"></rect>
+      <rect id="progressFill" x="40" y="160" width="0" height="10" rx="5" fill="#C89A3C"></rect>
+      <!-- phase markers -->
+      <g id="markers" font-family="IBM Plex Mono, monospace" font-size="11" fill="#445075"></g>
+      <!-- the moving note -->
+      <g id="note">
+        <ellipse cx="40" cy="90" rx="10" ry="7.5" fill="#1B2A4A" transform="rotate(-18 40 90)"></ellipse>
+        <line x1="49" y1="86" x2="49" y2="30" stroke="#1B2A4A" stroke-width="2"></line>
+      </g>
+    </svg>
+    <div class="progress-caption">
+      <span id="raisedLabel">KES 0 raised</span>
+      <span id="targetLabel">of KES 409,500</span>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="num" id="statRaised">—</div><div class="label">Total raised (approved)</div></div>
+    <div class="stat"><div class="num" id="statPledged">—</div><div class="label">Total pledged / month</div></div>
+    <div class="stat"><div class="num" id="statMembers">—</div><div class="label">Registered contributors</div></div>
+    <div class="stat"><div class="num" id="statPercent">—</div><div class="label">Of grand total (KES 409,500)</div></div>
+  </div>
+
+  <div class="section-title">
+    <h2>Monthly contribution trend</h2>
+    <span>Approved contributions only</span>
+  </div>
+  <div class="card">
+    <canvas id="trendChart" height="90"></canvas>
+    <p class="empty-state" id="chartEmpty" style="display:none;">No approved contributions yet — once the admin approves the first one, the trend will appear here.</p>
+  </div>
+
+  <div class="section-title">
+    <h2>Ready to give this month?</h2>
+  </div>
+  <p class="lede">
+    New here? <a href="register.html"><strong>Register your monthly pledge</strong></a> first.
+    Already registered? <a href="contribute.html"><strong>Submit this month's M-Pesa confirmation</strong></a>.
+  </p>
+</main>
+
+<footer>Webuye Central PEFA Church Youth Ministry &middot; Instruments &amp; Sound System Budget Tracker</footer>
+
+<script>
+function formatKES(n) {
+  return 'KES ' + Number(n || 0).toLocaleString('en-KE', {maximumFractionDigits: 0});
+}
+
+function monthLabel(ym) {
+  // ym like "2026-07"
+  const [y, m] = ym.split('-');
+  const d = new Date(Number(y), Number(m) - 1, 1);
+  return d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+}
+
+async function loadDashboard() {
+  const data = await apiGet({ action: 'dashboard' });
+  if (data.error) {
+    console.error(data.error);
+    return;
+  }
+
+  const grandTotal = Number(data.settings.GrandTotal) || 409500;
+  const phase1 = Number(data.settings.Phase1Target) || 224500;
+  const raised = Number(data.grandTotalRaised) || 0;
+  const pct = Math.min(100, (raised / grandTotal) * 100);
+
+  document.getElementById('statRaised').textContent = formatKES(raised);
+  document.getElementById('statPledged').textContent = formatKES(data.totalMonthlyPledged);
+  document.getElementById('statMembers').textContent = data.memberCount;
+  document.getElementById('statPercent').textContent = pct.toFixed(1) + '%';
+  document.getElementById('raisedLabel').textContent = formatKES(raised) + ' raised';
+  document.getElementById('targetLabel').textContent = 'of ' + formatKES(grandTotal);
+
+  // Staff progress visual: track spans x=40 to x=860 (820px)
+  const trackWidth = 820;
+  const fillWidth = (pct / 100) * trackWidth;
+  document.getElementById('progressFill').setAttribute('width', fillWidth.toFixed(1));
+
+  const noteX = 40 + fillWidth;
+  const noteGroup = document.getElementById('note');
+  noteGroup.setAttribute('transform', `translate(${fillWidth},0)`);
+
+  // Phase 1 marker on the staff
+  const phase1X = 40 + (phase1 / grandTotal) * trackWidth;
+  const markers = document.getElementById('markers');
+  markers.innerHTML = `
+    <line x1="${phase1X}" y1="30" x2="${phase1X}" y2="155" stroke="#7A2E2E" stroke-width="1" stroke-dasharray="3,3"></line>
+    <text x="${phase1X}" y="20" text-anchor="middle">Phase 1 · KES ${phase1.toLocaleString()}</text>
+    <text x="860" y="20" text-anchor="end">Grand Total · KES ${grandTotal.toLocaleString()}</text>
+  `;
+
+  // Trend chart
+  const months = Object.keys(data.monthTotals).sort();
+  if (months.length === 0) {
+    document.getElementById('chartEmpty').style.display = 'block';
+  } else {
+    const labels = months.map(monthLabel);
+    const values = months.map(m => data.monthTotals[m]);
+    new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Approved contributions (KES)',
+          data: values,
+          borderColor: '#C89A3C',
+          backgroundColor: 'rgba(200,154,60,0.15)',
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: '#1B2A4A',
+          pointRadius: 4
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { callback: v => 'KES ' + v.toLocaleString() } }
+        }
+      }
+    });
+  }
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
