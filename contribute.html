@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Give — Instruments Fund</title>
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">Webuye Central PEFA Youth Ministry <small>Instruments &amp; Sound System Fund</small></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="register.html">Register</a>
+    <a href="contribute.html" class="active">Give</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main>
+  <span class="eyebrow">Step 2</span>
+  <h1>Submit this month's contribution</h1>
+  <p class="lede">Send your pledge via M-Pesa first, then paste the confirmation SMS you received exactly as it arrived — we'll read the amount and code automatically.</p>
+
+  <form class="card" id="giveForm" style="margin-top:24px;">
+    <div>
+      <label for="name">Your registered name</label>
+      <select id="name" required>
+        <option value="">Loading members…</option>
+      </select>
+      <p class="help">Not on the list? <a href="register.html">Register here</a> first.</p>
+    </div>
+    <div>
+      <label for="month">Month</label>
+      <input type="month" id="month" required>
+    </div>
+    <div>
+      <label for="message">M-Pesa confirmation message</label>
+      <textarea id="message" required placeholder="Paste the full SMS, e.g. QAB1C2D3E4 Confirmed. Ksh1,000.00 sent to Webuye Central PEFA Church for account Instruments Fund on 5/7/26 at 2:30 PM..."></textarea>
+      <p class="help">Paste it word for word — we look for the amount, transaction code, and date in it.</p>
+    </div>
+    <div id="msg" class="msg hidden"></div>
+    <button type="submit" id="submitBtn">Submit contribution</button>
+  </form>
+</main>
+
+<footer>Webuye Central PEFA Church Youth Ministry &middot; Instruments &amp; Sound System Budget Tracker</footer>
+
+<script>
+async function loadMembers() {
+  const select = document.getElementById('name');
+  try {
+    const data = await apiGet({ action: 'members' });
+    select.innerHTML = '<option value="">Select your name</option>';
+    (data.members || []).forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.name;
+      opt.textContent = m.name;
+      select.appendChild(opt);
+    });
+  } catch (err) {
+    select.innerHTML = '<option value="">Could not load members — refresh the page</option>';
+  }
+}
+
+// Default the month picker to the current month
+document.getElementById('month').value = new Date().toISOString().slice(0, 7);
+
+document.getElementById('giveForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('msg');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const payload = {
+    action: 'submit',
+    name: document.getElementById('name').value,
+    month: document.getElementById('month').value,
+    message: document.getElementById('message').value.trim()
+  };
+
+  try {
+    const result = await apiPost(payload);
+    msg.classList.remove('hidden', 'success', 'error');
+    if (result.error) {
+      msg.classList.add('error');
+      msg.textContent = result.error;
+    } else {
+      msg.classList.add('success');
+      msg.textContent = result.message;
+      document.getElementById('message').value = '';
+    }
+  } catch (err) {
+    msg.classList.remove('hidden');
+    msg.classList.add('error');
+    msg.textContent = 'Something went wrong. Please check your connection and try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit contribution';
+  }
+});
+
+loadMembers();
+</script>
+
+</body>
+</html>
