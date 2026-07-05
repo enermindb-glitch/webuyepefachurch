@@ -21,17 +21,40 @@
 </header>
 
 <main>
-  <section class="hero">
+  <div class="section-title" style="margin-top:0;">
+    <h2>Registered contributors</h2>
+    <span id="contributorCount"></span>
+  </div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table style="width:100%; border-collapse:collapse;" id="membersTable">
+      <thead>
+        <tr style="background:var(--cream); text-align:left;">
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Name</th>
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Monthly pledge</th>
+          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Total contributed</th>
+        </tr>
+      </thead>
+      <tbody id="membersTableBody">
+        <tr><td colspan="3" style="padding:18px;">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section class="hero" style="margin-top:48px;">
     <span class="eyebrow">Two-Phase Budget · Target KES 409,500</span>
     <h1>Watch the fund move, month by month.</h1>
     <p class="lede">Every approved M-Pesa contribution moves this needle. Phase 1 gets us to a working worship setup; Phase 2 completes the band and professional sound.</p>
   </section>
 
+  <div class="section-title">
+    <h2>Fund progress</h2>
+    <span>Toward KES 409,500</span>
+  </div>
   <!-- SIGNATURE ELEMENT: progress rendered as a rising note on a music staff -->
-  <div class="card" style="margin-top:28px;">
+  <div class="card">
     <svg id="staffProgress" viewBox="0 0 900 190" width="100%" height="190" role="img" aria-label="Fund progress on a music staff">
       <!-- staff lines -->
-      <g stroke="#E3D9C4" stroke-width="1.5">
+      <g stroke="#DED2B8" stroke-width="1.5">
         <line x1="40" y1="40" x2="860" y2="40"></line>
         <line x1="40" y1="65" x2="860" y2="65"></line>
         <line x1="40" y1="90" x2="860" y2="90"></line>
@@ -39,14 +62,14 @@
         <line x1="40" y1="140" x2="860" y2="140"></line>
       </g>
       <!-- filled progress track under the staff -->
-      <rect x="40" y="160" width="820" height="10" rx="5" fill="#F0E9D8"></rect>
-      <rect id="progressFill" x="40" y="160" width="0" height="10" rx="5" fill="#C89A3C"></rect>
+      <rect x="40" y="160" width="820" height="10" rx="5" fill="#EBE3CE"></rect>
+      <rect id="progressFill" x="40" y="160" width="0" height="10" rx="5" fill="#C77A2E"></rect>
       <!-- phase markers -->
-      <g id="markers" font-family="IBM Plex Mono, monospace" font-size="11" fill="#445075"></g>
+      <g id="markers" font-family="IBM Plex Mono, monospace" font-size="11" fill="#55624C"></g>
       <!-- the moving note -->
       <g id="note">
-        <ellipse cx="40" cy="90" rx="10" ry="7.5" fill="#1B2A4A" transform="rotate(-18 40 90)"></ellipse>
-        <line x1="49" y1="86" x2="49" y2="30" stroke="#1B2A4A" stroke-width="2"></line>
+        <ellipse cx="40" cy="90" rx="10" ry="7.5" fill="#24301F" transform="rotate(-18 40 90)"></ellipse>
+        <line x1="49" y1="86" x2="49" y2="30" stroke="#24301F" stroke-width="2"></line>
       </g>
     </svg>
     <div class="progress-caption">
@@ -69,25 +92,6 @@
   <div class="card">
     <canvas id="trendChart" height="90"></canvas>
     <p class="empty-state" id="chartEmpty" style="display:none;">No approved contributions yet — once the admin approves the first one, the trend will appear here.</p>
-  </div>
-
-  <div class="section-title">
-    <h2>Registered contributors</h2>
-    <span id="contributorCount"></span>
-  </div>
-  <div class="card" style="padding:0; overflow:hidden;">
-    <table style="width:100%; border-collapse:collapse;" id="membersTable">
-      <thead>
-        <tr style="background:var(--cream); text-align:left;">
-          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Name</th>
-          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Monthly pledge</th>
-          <th style="padding:14px 18px; font-size:0.82rem; color:var(--ink-soft);">Total contributed</th>
-        </tr>
-      </thead>
-      <tbody id="membersTableBody">
-        <tr><td colspan="3" style="padding:18px;">Loading…</td></tr>
-      </tbody>
-    </table>
   </div>
 
   <div class="section-title">
@@ -145,7 +149,7 @@ async function loadDashboard() {
   const phase1X = 40 + (phase1 / grandTotal) * trackWidth;
   const markers = document.getElementById('markers');
   markers.innerHTML = `
-    <line x1="${phase1X}" y1="30" x2="${phase1X}" y2="155" stroke="#7A2E2E" stroke-width="1" stroke-dasharray="3,3"></line>
+    <line x1="${phase1X}" y1="30" x2="${phase1X}" y2="155" stroke="#7A3327" stroke-width="1" stroke-dasharray="3,3"></line>
     <text x="${phase1X}" y="20" text-anchor="middle">Phase 1 · KES ${phase1.toLocaleString()}</text>
     <text x="860" y="20" text-anchor="end">Grand Total · KES ${grandTotal.toLocaleString()}</text>
   `;
@@ -164,11 +168,11 @@ async function loadDashboard() {
         datasets: [{
           label: 'Approved contributions (KES)',
           data: values,
-          borderColor: '#C89A3C',
+          borderColor: '#C77A2E',
           backgroundColor: 'rgba(200,154,60,0.15)',
           fill: true,
           tension: 0.3,
-          pointBackgroundColor: '#1B2A4A',
+          pointBackgroundColor: '#24301F',
           pointRadius: 4
         }]
       },
