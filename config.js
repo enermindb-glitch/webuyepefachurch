@@ -1,5 +1,5 @@
 // Paste the Web App URL you get after deploying the Apps Script (ends in /exec)
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXpIkLkwitjKrfrPFEs1C5s2kiH0WiyvogDG37N0nmLdwhSkMBjfg-N3eqkwP4c7ABaA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxtKZtufxEf6D7S8G3uuO5KGt2ix9Y2GoCgun33uOZR3RoWwJ80uhiyo8AL0VQZnBpJYw/exec";
 
 // Helper: GET request to the Apps Script API
 async function apiGet(params) {
