@@ -1,0 +1,276 @@
+/* ============================================================
+   Webuye Central PEFA Church Youth Ministry — Instruments Fund
+   Design tokens
+   Ink:    #1B2A4A  (deep worship-night indigo)
+   Gold:   #C89A3C  (brass / offering)
+   Cream:  #FAF5E9  (paper / hymn sheet)
+   Maroon: #7A2E2E  (pending / attention)
+   Green:  #2F6B44  (approved / growth)
+   Display face: Fraunces (warm, characterful serif)
+   Body face:    Work Sans
+   Data face:    IBM Plex Mono (ledger numbers)
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink: #1B2A4A;
+  --ink-soft: #445075;
+  --gold: #C89A3C;
+  --gold-soft: #E7CE93;
+  --cream: #FAF5E9;
+  --paper: #FFFFFF;
+  --maroon: #7A2E2E;
+  --green: #2F6B44;
+  --line: #E3D9C4;
+  --shadow: 0 10px 30px rgba(27, 42, 74, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: 'Fraunces', serif;
+  margin: 0 0 0.4em 0;
+  color: var(--ink);
+}
+
+a { color: var(--ink); }
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 6vw;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.brand small {
+  display: block;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.72rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  margin-left: 26px;
+  color: var(--ink-soft);
+  border-bottom: 2px solid transparent;
+  padding-bottom: 3px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+nav a:hover, nav a.active {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 6vw 90px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.hero h1 {
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  max-width: 16ch;
+}
+
+.hero p.lede {
+  max-width: 56ch;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-shadow: var(--shadow);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin: 32px 0;
+}
+
+.stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.stat .num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stat .label {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.section-title {
+  margin-top: 56px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.section-title h2 { font-size: 1.3rem; }
+.section-title span { color: var(--ink-soft); font-size: 0.85rem; }
+
+form.card { display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
+
+label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  width: 100%;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.96rem;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+textarea { min-height: 110px; resize: vertical; font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem; }
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  background: var(--paper);
+}
+
+button {
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.96rem;
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: none;
+  background: var(--ink);
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  align-self: flex-start;
+}
+
+button:hover { background: var(--ink-soft); }
+button:active { transform: translateY(1px); }
+
+button.secondary {
+  background: transparent;
+  color: var(--maroon);
+  border: 1px solid var(--maroon);
+}
+
+button.approve { background: var(--green); color: white; }
+button.reject { background: var(--maroon); color: white; }
+
+.msg { padding: 13px 16px; border-radius: 8px; font-size: 0.92rem; margin-top: -4px; }
+.msg.success { background: #E7F1EA; color: var(--green); border: 1px solid #BFDCC8; }
+.msg.error { background: #F6E7E6; color: var(--maroon); border: 1px solid #E4C2C0; }
+.msg.hidden { display: none; }
+
+.help {
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+  margin-top: -8px;
+}
+
+.pending-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  background: var(--paper);
+}
+
+.pending-item .top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.pending-item .raw {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  background: var(--cream);
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin: 8px 0 12px;
+  white-space: pre-wrap;
+}
+
+.pending-item .actions { display: flex; gap: 10px; }
+
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  padding: 30px 0 50px;
+}
+
+.progress-caption {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+.empty-state {
+  color: var(--ink-soft);
+  font-style: italic;
+  padding: 20px 0;
+}
