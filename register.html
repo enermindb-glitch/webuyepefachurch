@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Instruments Fund</title>
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">Webuye Central PEFA Youth Ministry <small>Instruments &amp; Sound System Fund</small></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="register.html" class="active">Register</a>
+    <a href="contribute.html">Give</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main>
+  <span class="eyebrow">Step 1</span>
+  <h1>Register your monthly pledge</h1>
+  <p class="lede">Set the amount you're committing to give each month. You'll use your registered name each time you submit a contribution.</p>
+
+  <form class="card" id="registerForm" style="margin-top:24px;">
+    <div>
+      <label for="name">Full name</label>
+      <input type="text" id="name" required placeholder="e.g. Jane Wanjiru">
+    </div>
+    <div>
+      <label for="phone">Phone number</label>
+      <input type="tel" id="phone" required placeholder="07XX XXX XXX">
+    </div>
+    <div>
+      <label for="pledge">Monthly pledge (KES)</label>
+      <input type="number" id="pledge" required min="1" placeholder="e.g. 1000">
+    </div>
+    <div id="msg" class="msg hidden"></div>
+    <button type="submit" id="submitBtn">Register</button>
+  </form>
+</main>
+
+<footer>Webuye Central PEFA Church Youth Ministry &middot; Instruments &amp; Sound System Budget Tracker</footer>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('msg');
+  btn.disabled = true;
+  btn.textContent = 'Registering...';
+
+  const payload = {
+    action: 'register',
+    name: document.getElementById('name').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    pledge: document.getElementById('pledge').value
+  };
+
+  try {
+    const result = await apiPost(payload);
+    msg.classList.remove('hidden', 'success', 'error');
+    if (result.error) {
+      msg.classList.add('error');
+      msg.textContent = result.error;
+    } else {
+      msg.classList.add('success');
+      msg.textContent = result.message;
+      document.getElementById('registerForm').reset();
+    }
+  } catch (err) {
+    msg.classList.remove('hidden');
+    msg.classList.add('error');
+    msg.textContent = 'Something went wrong. Please check your connection and try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Register';
+  }
+});
+</script>
+
+</body>
+</html>
