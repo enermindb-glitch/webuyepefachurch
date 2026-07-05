@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Instruments Fund</title>
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">Webuye Central PEFA Youth Ministry <small>Instruments &amp; Sound System Fund</small></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="register.html">Register</a>
+    <a href="contribute.html">Give</a>
+    <a href="admin.html" class="active">Admin</a>
+  </nav>
+</header>
+
+<main>
+  <span class="eyebrow">Admin only</span>
+  <h1>Review pending contributions</h1>
+  <p class="lede">Approved contributions are the only ones counted on the homepage. Check the code and amount against the pasted message before approving.</p>
+
+  <div class="card" style="max-width:420px; margin: 24px 0; display:flex; gap:12px; align-items:flex-end;">
+    <div style="flex:1;">
+      <label for="password">Admin password</label>
+      <input type="password" id="password" placeholder="Enter password">
+    </div>
+    <button id="loadBtn">Load pending</button>
+  </div>
+
+  <div id="msg" class="msg hidden"></div>
+  <div id="list"></div>
+</main>
+
+<footer>Webuye Central PEFA Church Youth Ministry &middot; Instruments &amp; Sound System Budget Tracker</footer>
+
+<script>
+function getPassword() { return document.getElementById('password').value; }
+
+function monthLabel(ym) {
+  if (!ym || !ym.includes('-')) return ym;
+  const [y, m] = ym.split('-');
+  const d = new Date(Number(y), Number(m) - 1, 1);
+  return d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+}
+
+async function loadPending() {
+  const msg = document.getElementById('msg');
+  const list = document.getElementById('list');
+  const password = getPassword();
+  msg.classList.add('hidden');
+  list.innerHTML = 'Loading…';
+
+  try {
+    const data = await apiGet({ action: 'pending', password });
+    if (data.error) {
+      list.innerHTML = '';
+      msg.classList.remove('hidden');
+      msg.classList.add('error');
+      msg.classList.remove('success');
+      msg.textContent = data.error;
+      return;
+    }
+    renderList(data.pending || []);
+  } catch (err) {
+    list.innerHTML = '';
+    msg.classList.remove('hidden');
+    msg.classList.add('error');
+    msg.textContent = 'Could not load pending contributions. Check your connection.';
+  }
+}
+
+function renderList(items) {
+  const list = document.getElementById('list');
+  if (items.length === 0) {
+    list.innerHTML = '<p class="empty-state">No pending contributions right now.</p>';
+    return;
+  }
+  list.innerHTML = '';
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'pending-item';
+    div.innerHTML = `
+      <div class="top">
+        <span>${item.name} — ${monthLabel(item.month)}</span>
+        <span>KES ${Number(item.amount).toLocaleString()}</span>
+      </div>
+      <div class="help">Code: ${item.code || 'not detected — check message'}</div>
+      <div class="raw">${item.message}</div>
+      <div class="actions">
+        <button class="approve">Approve</button>
+        <button class="reject">Reject</button>
+      </div>
+    `;
+    div.querySelector('.approve').addEventListener('click', () => actOn(item.rowIndex, 'approve', div));
+    div.querySelector('.reject').addEventListener('click', () => actOn(item.rowIndex, 'reject', div));
+    list.appendChild(div);
+  });
+}
+
+async function actOn(rowIndex, action, div) {
+  const password = getPassword();
+  const buttons = div.querySelectorAll('button');
+  buttons.forEach(b => b.disabled = true);
+  try {
+    const result = await apiPost({ action, rowIndex, password });
+    if (result.error) {
+      alert(result.error);
+      buttons.forEach(b => b.disabled = false);
+    } else {
+      div.remove();
+    }
+  } catch (err) {
+    alert('Something went wrong. Try again.');
+    buttons.forEach(b => b.disabled = false);
+  }
+}
+
+document.getElementById('loadBtn').addEventListener('click', loadPending);
+document.getElementById('password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loadPending();
+});
+</script>
+
+</body>
+</html>
